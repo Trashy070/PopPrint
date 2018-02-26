@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Profiles" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="Profiles" msdata:IsDataSet="true" msdata:Locale="en-US">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Profile">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Name" type="xs:string" minOccurs="0" />
+              <xs:element name="PopServer" type="xs:string" minOccurs="0" />
+              <xs:element name="PopUserName" type="xs:string" minOccurs="0" />
+              <xs:element name="PopPassword" type="xs:string" minOccurs="0" />
+              <xs:element name="PopPort" type="xs:string" minOccurs="0" />
+              <xs:element name="PopSSL" type="xs:string" minOccurs="0" />
+              <xs:element name="PopAction" type="xs:string" minOccurs="0" />
+              <xs:element name="PopDelete" type="xs:string" minOccurs="0" />
+              <xs:element name="ArchiveFile" type="xs:string" minOccurs="0" />
+              <xs:element name="ArchiveLocation" type="xs:string" minOccurs="0" />
+              <xs:element name="PrintQueue" type="xs:string" minOccurs="0" />
+              <xs:element name="WCF-URL" type="xs:string" minOccurs="0" />
+              <xs:element name="WCF-Operation" type="xs:string" minOccurs="0" />
+              <xs:element name="WCF-Active" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

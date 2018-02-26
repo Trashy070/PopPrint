@@ -1,0 +1,18 @@
+<Profiles>
+<Profile>
+<Name>Test</Name>
+<PopServer>test.com.au</PopServer>
+<PopUserName>test@test.com</PopUserName>
+<PopPassword>test</PopPassword>
+<PopPort>110</PopPort>
+<PopSSL>SSL</PopSSL>
+<PopAction>Print</PopAction>
+<PopDelete>Yes</PopDelete>
+<ArchiveFile>Yes</ArchiveFile>
+<ArchiveLocation>C:\Files\</ArchiveLocation>
+<PrintQueue> </PrintQueue>
+<WCF-URL>http://xxxxx</WCF-URL>
+<WCF-Operation>FTP</WCF-Operation>
+<WCF-Active>No</WCF-Active>
+</Profile>
+</Profiles>
