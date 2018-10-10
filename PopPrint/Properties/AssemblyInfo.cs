@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("PopPrint")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Print Directly from Mail box")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Computer Technology Corporation Pty Ltd")]
 [assembly: AssemblyProduct("PopPrint")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]

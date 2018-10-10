@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net.Mail;
-using static PopPrint.MailHelper;
 
 namespace PopPrint
 {
@@ -12,16 +11,32 @@ namespace PopPrint
     {
 
 
-        public static List<MsgSummary> GetMail(string hostname, int port, bool useSsl, string username, string password)
+        public static List<MsgSummary> GetMail(string hostname, int port, string useSsl, string username, string password)
         {
             int messageCount = 0;
             String fromMail = "";
             String subject = "";
+            bool ssl = false;
+            switch (useSsl)
+            {
+                case "none":
+                    ssl = false;
+                    break;
+
+                case "SSL":
+                    ssl = true;
+                    break;
+
+                case "TLS":
+                    ssl = true;
+                    break;
+
+            }
             List<MsgSummary> allMessages = new List<MsgSummary>();
             Pop3Client client = new Pop3Client();
             try
             {
-                client.Connect(hostname, port, useSsl);
+                client.Connect(hostname, port, ssl);
                 if (client.Connected)
                 {
                     client.Authenticate(username, password);
@@ -50,19 +65,37 @@ namespace PopPrint
                                 foreach (OpenPop.Mime.MessagePart attach in msg.FindAllAttachments())
                                 {
                                     string file_name_attach = attach.FileName;
-                                    //TODO
-                                    //FileInfo fi = new FileInfo(Path.Combine(Globals.CustomReceive, file_name_attach));
-                                   // att.Add(new MsgAtt() { AttFilename = fi });
-                                   // attach.Save(fi);
+                                    if (attach.FileName != "(no name)")
+                                    {
+                                        FileInfo fi = new FileInfo(Path.Combine(Globals.TempPath, file_name_attach));
+                                        int ij = 0;
+                                        string sName = fi.Name;
+                                        string sExt = fi.Extension;
+
+                                        while (File.Exists(sName))
+                                        {
+                                            sName = fi.Name + ij.ToString() + sExt;
+                                            ij++;
+
+                                        }
+                                        fi = new FileInfo(Path.Combine(Globals.TempPath, sName));
+                                        att.Add(new MsgAtt() { AttFilename = fi });
+
+                                        attach.Save(fi);
+                                    }
+
                                 }
                                 newSumm.MsgFile = att;
                                 newSumm.MsgFrom = fromMail;
                                 newSumm.MsgSubject = subject;
                                 newSumm.MsgStatus = "Ok";
-                                client.DeleteMessage(i);
+                                newSumm.MsgId = i;
+
+
                             }
                             catch (Exception exAtt)
                             {
+                                // Program.AddRTBText(rtbStatus, string.Format("{0:g} ", DateTime.Now) + " Error Retrieving Email message " + i.ToString() + " of " + messageCount.ToString()+ " Error was: " + exAtt.Message + Environment.NewLine, Color.Red);
                                 newSumm.MsgStatus = exAtt.Message;
 
                             }
@@ -166,6 +199,47 @@ namespace PopPrint
             mailSent = true;
         }
 
+        public static void DeleteMessage(string hostname, int port, string useSsl, string username, string password, int msgId)
+        {
+            int messageCount = 0;
+            bool ssl = false;
+            switch (useSsl)
+            {
+                case "none":
+                    ssl = false;
+                    break;
+
+                case "SSL":
+                    ssl = true;
+                    break;
+
+                case "TLS":
+                    ssl = true;
+                    break;
+
+            }
+            Pop3Client client = new Pop3Client();
+            try
+            {
+                client.Connect(hostname, port, ssl);
+                if (client.Connected)
+                {
+                    client.Authenticate(username, password);
+                }
+                messageCount = client.GetMessageCount();
+                if (messageCount > 0)
+                {
+
+                    client.DeleteMessage(msgId);
+                    client.Disconnect();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+
         public static String sendMsg(String file, String to, String mySubject, String msg)
         {
             SmtpClient myMail = new SmtpClient();
@@ -190,10 +264,10 @@ namespace PopPrint
                 }
                 catch (Exception ex)
                 {
-                 //   sendMsg("", Globals.AlertsTo, "Error Sending Alert Email", "Error Message is: " + ex.Message + Environment.NewLine + "Original Message to send was: " + Environment.NewLine + msg);
+                    //   sendMsg("", Globals.AlertsTo, "Error Sending Alert Email", "Error Message is: " + ex.Message + Environment.NewLine + "Original Message to send was: " + Environment.NewLine + msg);
                 }
             }
-          //  myMsg.From = new System.Net.Mail.MailAddress(SMTPServer.Email, "CTC Adapter");
+            //  myMsg.From = new System.Net.Mail.MailAddress(SMTPServer.Email, "CTC Adapter");
             myMsg.Subject = mySubject;
             myMsg.Body = msg;
             myMail.SendCompleted += new SendCompletedEventHandler(SendCompletedCallback);
